@@ -6,9 +6,14 @@ from skimage.feature import canny
 from classify import get_hint
 
 if __name__ == '__main__':
-    import sys
+    import argparse
 
-    fname = sys.argv[1]
+    parser = argparse.ArgumentParser()
+    parser.add_argument("input", help="input file")
+    parser.add_argument("-o", "--output", help="output file")
+    args = parser.parse_args()
+
+    fname = args.input
     puzzle = io.imread(fname, as_gray=True)
 
     nrows = 15
@@ -51,6 +56,6 @@ if __name__ == '__main__':
         'columns': column_hints,
     }
 
-    output_file = sys.argv[2]
+    output_file = "puzzle.toml" if not args.output else args.output
     with open(output_file, 'w') as f:
         toml.dump(serialised_puzzle, f)
